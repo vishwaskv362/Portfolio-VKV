@@ -18,12 +18,20 @@ import {
   Cloud // Added missing import
 } from 'lucide-react';
 
-// --- CYBER CURSOR COMPONENT ---
+// --- CYBER CURSOR COMPONENT (Desktop Only) ---
 const CyberCursor = () => {
   const cursorRef = useRef(null);
   const dotRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    // Detect if it's a touch device
+    const checkMobile = () => {
+      setIsMobile('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    };
+    
+    checkMobile();
+    
     const onMouseMove = (e) => {
       const { clientX, clientY } = e;
       
@@ -50,9 +58,19 @@ const CyberCursor = () => {
       }
     };
 
-    window.addEventListener('mousemove', onMouseMove);
-    return () => window.removeEventListener('mousemove', onMouseMove);
-  }, []);
+    if (!isMobile) {
+      window.addEventListener('mousemove', onMouseMove);
+    }
+    
+    return () => {
+      if (!isMobile) {
+        window.removeEventListener('mousemove', onMouseMove);
+      }
+    };
+  }, [isMobile]);
+
+  // Don't render custom cursor on mobile
+  if (isMobile) return null;
 
   return createPortal(
     <>
@@ -182,8 +200,8 @@ const Portfolio = () => {
 
       {/* --- NAVBAR --- */}
       <nav className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? 'bg-black/80 backdrop-blur-md border-b border-cyan-900/50 py-4' : 'py-6'}`}>
-        <div className="container mx-auto px-6 flex justify-between items-center">
-          <div className="text-2xl font-bold tracking-tighter flex items-center gap-2">
+        <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
+          <div className="text-xl md:text-2xl font-bold tracking-tighter flex items-center gap-2">
             <span className="text-purple-500 animate-pulse">&lt;</span>
             <span className="text-white text-shadow-neon">VKV_SYSTEMS</span>
             <span className="text-purple-500 animate-pulse">/&gt;</span>
@@ -198,10 +216,10 @@ const Portfolio = () => {
         </div>
       </nav>
 
-      <main className="relative z-10 container mx-auto px-6 pt-32 pb-20">
+      <main className="relative z-10 container mx-auto px-4 md:px-6 pt-24 md:pt-32 pb-12 md:pb-20">
         
         {/* --- HERO SECTION --- */}
-        <section id="core" className="min-h-[80vh] flex flex-col lg:flex-row items-center justify-center gap-16 mb-32">
+        <section id="core" className="min-h-[80vh] flex flex-col lg:flex-row items-center justify-center gap-8 md:gap-16 mb-20 md:mb-32">
           
           {/* Text Content */}
           <div className={`space-y-6 lg:w-1/2 transform transition-all duration-1000 ${mounted ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
@@ -210,28 +228,28 @@ const Portfolio = () => {
               SYSTEM ONLINE
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-bold text-white leading-none tracking-tighter mix-blend-screen mb-4">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white leading-none tracking-tighter mix-blend-screen mb-4">
               <span className="glitch-wrapper" data-text="VISHWAS">VISHWAS</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 animate-gradient">K V</span>
             </h1>
-            <h2 className="text-2xl md:text-3xl text-cyan-500/80 font-mono border-l-4 border-purple-500 pl-4">
+            <h2 className="text-xl sm:text-2xl md:text-3xl text-cyan-500/80 font-mono border-l-4 border-purple-500 pl-4">
               Full Stack Engineer & <br/> Cloud Architect
             </h2>
             
-            <p className="text-slate-400 max-w-lg leading-relaxed text-lg">
+            <p className="text-slate-400 max-w-lg leading-relaxed text-base md:text-lg">
               Executing high-performance backend logic. <br/>
               Orchestrating scalable cloud infrastructure. <br/>
               <span className="text-purple-400">Transforming data into digital reality.</span>
             </p>
 
-            <div className="flex gap-6 pt-4">
-              <button onClick={() => window.open('https://linkedin.com', '_blank')} className="group relative px-8 py-3 bg-cyan-500/10 border border-cyan-500/50 hover:bg-cyan-500/20 transition-all overflow-hidden">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 pt-4">
+              <button onClick={() => window.open('https://linkedin.com', '_blank')} className="group relative px-6 sm:px-8 py-3 bg-cyan-500/10 border border-cyan-500/50 hover:bg-cyan-500/20 transition-all overflow-hidden">
                 <div className="absolute inset-0 w-0 bg-cyan-500 transition-all duration-[250ms] ease-out group-hover:w-full opacity-10"></div>
-                <span className="relative flex items-center gap-3 text-cyan-400 font-bold tracking-wider group-hover:text-white">
+                <span className="relative flex items-center justify-center gap-3 text-cyan-400 font-bold tracking-wider group-hover:text-white text-sm sm:text-base">
                   <Linkedin size={18} /> CONNECT
                 </span>
               </button>
-              <button onClick={() => window.open('https://github.com', '_blank')} className="group relative px-8 py-3 bg-purple-500/10 border border-purple-500/50 hover:bg-purple-500/20 transition-all">
-                 <span className="relative flex items-center gap-3 text-purple-400 font-bold tracking-wider group-hover:text-white">
+              <button onClick={() => window.open('https://github.com', '_blank')} className="group relative px-6 sm:px-8 py-3 bg-purple-500/10 border border-purple-500/50 hover:bg-purple-500/20 transition-all">
+                 <span className="relative flex items-center justify-center gap-3 text-purple-400 font-bold tracking-wider group-hover:text-white text-sm sm:text-base">
                   <Github size={18} /> GITHUB
                 </span>
               </button>
@@ -240,7 +258,7 @@ const Portfolio = () => {
 
           {/* 3D Floating Profile Card */}
           <div className={`lg:w-1/2 flex justify-center transform transition-all duration-1000 delay-300 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
-            <TiltCard className="w-80 h-96 md:w-96 md:h-[500px]">
+            <TiltCard className="w-72 h-80 sm:w-80 sm:h-96 md:w-96 md:h-[500px]">
               <div className="relative w-full h-full bg-black border border-cyan-500/30 rounded-xl overflow-hidden group shadow-[0_0_50px_rgba(8,145,178,0.2)] flex items-center justify-center">
                 
                 {/* Holographic Overlay */}
@@ -282,18 +300,18 @@ const Portfolio = () => {
         </section>
 
         {/* --- EXPERIENCE "MODULES" --- */}
-        <section id="modules" className="mb-32">
-          <div className="flex items-end gap-4 mb-16 border-b border-cyan-900/50 pb-4">
-            <h2 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-white">
+        <section id="modules" className="mb-20 md:mb-32">
+          <div className="flex flex-col sm:flex-row items-start sm:items-end gap-2 sm:gap-4 mb-12 md:mb-16 border-b border-cyan-900/50 pb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-white">
               EXPERIENCE_LOG
             </h2>
-            <span className="text-purple-500 font-mono text-xl mb-2 animate-pulse">/// READ_ONLY</span>
+            <span className="text-purple-500 font-mono text-sm sm:text-xl mb-2 animate-pulse">/// READ_ONLY</span>
           </div>
 
           <div className="space-y-12">
             {/* Job Node 1 */}
             <TiltCard>
-              <div className="relative bg-slate-900/40 border-l-4 border-cyan-500 p-8 md:p-12 backdrop-blur-sm hover:bg-slate-900/60 transition-colors group">
+              <div className="relative bg-slate-900/40 border-l-4 border-cyan-500 p-6 md:p-8 lg:p-12 backdrop-blur-sm hover:bg-slate-900/60 transition-colors group">
                 <div className="absolute -right-4 -top-4 w-16 h-16 border-t-2 border-r-2 border-cyan-500/50 rounded-tr-xl group-hover:border-cyan-400 transition-colors"></div>
                 
                 <div className="flex flex-col md:flex-row justify-between items-start mb-6">
@@ -346,7 +364,7 @@ const Portfolio = () => {
 
             {/* Job Node 2 */}
             <TiltCard>
-              <div className="relative bg-slate-900/40 border-l-4 border-purple-600 p-8 md:p-12 backdrop-blur-sm hover:bg-slate-900/60 transition-colors group">
+              <div className="relative bg-slate-900/40 border-l-4 border-purple-600 p-6 md:p-8 lg:p-12 backdrop-blur-sm hover:bg-slate-900/60 transition-colors group">
                 <div className="absolute -left-1 -bottom-1 w-4 h-4 bg-purple-600"></div>
                 
                 <div className="flex flex-col md:flex-row justify-between items-start mb-6">
@@ -379,16 +397,16 @@ const Portfolio = () => {
         </section>
 
         {/* --- PROJECTS "DEPLOYMENTS" --- */}
-        <section id="deployments" className="mb-32">
-          <div className="flex items-center gap-4 mb-16">
+        <section id="deployments" className="mb-20 md:mb-32">
+          <div className="flex items-center gap-4 mb-12 md:mb-16">
             <div className="h-px flex-grow bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
-            <h2 className="text-3xl md:text-5xl font-bold text-white tracking-widest text-center">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white tracking-widest text-center">
               PROJECT_DEPLOYMENTS
             </h2>
             <div className="h-px flex-grow bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12">
             {/* Project 1 */}
             <TiltCard className="h-full">
               <div className="h-full bg-black border border-slate-800 relative overflow-hidden group rounded-xl">
@@ -454,9 +472,9 @@ const Portfolio = () => {
         </section>
 
         {/* --- SKILLS GRID (3D CUBES CONCEPT) --- */}
-        <section className="mb-32">
-           <h2 className="text-2xl font-bold text-slate-500 mb-8 text-center tracking-[0.5em]">SYSTEM_CAPABILITIES</h2>
-           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <section className="mb-20 md:mb-32">
+           <h2 className="text-xl sm:text-2xl font-bold text-slate-500 mb-8 text-center tracking-[0.3em] sm:tracking-[0.5em]">SYSTEM_CAPABILITIES</h2>
+           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
               {[
                 { name: 'Python', icon: <Code /> },
                 { name: 'React', icon: <Globe /> },
@@ -467,11 +485,11 @@ const Portfolio = () => {
                 { name: 'Security', icon: <Lock /> },
                 { name: 'DevOps', icon: <Terminal /> },
               ].map((skill, idx) => (
-                <div key={idx} className="bg-slate-900/30 border border-slate-800 p-6 flex flex-col items-center justify-center gap-4 hover:bg-cyan-900/20 hover:border-cyan-500/50 transition-all duration-300 group">
+                <div key={idx} className="bg-slate-900/30 border border-slate-800 p-4 md:p-6 flex flex-col items-center justify-center gap-3 md:gap-4 hover:bg-cyan-900/20 hover:border-cyan-500/50 transition-all duration-300 group">
                    <div className="text-slate-500 group-hover:text-cyan-400 transition-colors group-hover:scale-110 transform duration-300">
                      {skill.icon}
                    </div>
-                   <span className="font-bold text-slate-400 group-hover:text-white">{skill.name}</span>
+                   <span className="font-bold text-sm md:text-base text-slate-400 group-hover:text-white text-center">{skill.name}</span>
                 </div>
               ))}
            </div>
