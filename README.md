@@ -4,7 +4,7 @@ A modern, cyberpunk-themed portfolio website showcasing my professional experien
 
 ## 🚀 Live Demo
 
-**[View Portfolio](https://vishwaskv362.github.io/Portfolio-VKV/)**
+**[View Portfolio](https://vishwaskv362.github.io/vishwaskv/)**
 
 ## ✨ Features
 
@@ -33,8 +33,8 @@ A modern, cyberpunk-themed portfolio website showcasing my professional experien
 
 1. Clone the repository
 ```bash
-git clone https://github.com/vishwaskv362/Portfolio-VKV.git
-cd Portfolio-VKV
+git clone https://github.com/vishwaskv362/vishwaskv.git
+cd vishwaskv
 ```
 
 2. Install dependencies
